@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Affine Transformations</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-image: url('/static/bg.svg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            width: 400px;
+            animation: fadeIn 1s ease-in-out;
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        input[type="file"],
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border 0.3s ease;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            border-color: #28a745;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: lightblue;
+            color: black;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: lightskyblue;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        /* Hide fields initially */
+        #rotate-fields, #scale-fields, #shear-fields {
+            display: none;
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Affine Transformations</h1>
+        <form action="/transform" method="POST" enctype="multipart/form-data">
+            <label for="file">Upload Image:</label>
+            <input type="file" name="file" accept="image/*" required>
+
+            <label for="operation">Select Transformation:</label>
+            <select name="operation" id="operation" onchange="toggleInputs()">
+                <option value="translate">Translate</option>
+                <option value="rotate">Rotate</option>
+                <option value="scale">Scale</option>
+                <option value="shear">Shear</option>
+            </select>
+
+            <!-- Translation Inputs -->
+            <div id="translate-fields">
+                <label for="tx">Translate X (tx):</label>
+                <input type="number" name="tx" value="100">
+
+                <label for="ty">Translate Y (ty):</label>
+                <input type="number" name="ty" value="100">
+            </div>
+
+            <!-- Rotation Inputs -->
+            <div id="rotate-fields">
+                <label for="angle">Rotation Angle:</label>
+                <input type="text" name="angle" value="45">
+            </div>
+
+            <!-- Scaling Inputs -->
+            <div id="scale-fields">
+                <label for="scale_x">Scale X:</label>
+                <input type="text" name="scale_x" value="1">
+
+                <label for="scale_y">Scale Y:</label>
+                <input type="text" name="scale_y" value="1">
+            </div>
+
+            <!-- Shear Inputs -->
+            <div id="shear-fields">
+                <label for="shear_factor">Shear Factor:</label>
+                <input type="text" name="shear_factor" value="0.2">
+            </div>
+
+            <button type="submit">Apply Transformation</button>
+        </form>
+    </div>
+
+    <script>
+        function toggleInputs() {
+            const operation = document.getElementById('operation').value;
+            document.getElementById('translate-fields').style.display = (operation === 'translate') ? 'block' : 'none';
+            document.getElementById('rotate-fields').style.display = (operation === 'rotate') ? 'block' : 'none';
+            document.getElementById('scale-fields').style.display = (operation === 'scale') ? 'block' : 'none';
+            document.getElementById('shear-fields').style.display = (operation === 'shear') ? 'block' : 'none';
+        }
+    </script>
+</body>
+</html>
